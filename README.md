@@ -6,8 +6,10 @@ Order on your own, or open a **group session** where several people share one
 cart in real time — adding items, seeing each other's changes live, marking
 themselves ready, and having the host check out for everyone.
 
-Backend: [`../inminutes_backend`](../inminutes_backend) (Express + MongoDB +
-socket.io).
+Backend: [`Harish-tig/Inminutes_backend`](https://github.com/Harish-tig/Inminutes_backend)
+(Express + MongoDB + socket.io), also published as
+[`harishsdockdom/inminutes_backend`](https://hub.docker.com/r/harishsdockdom/inminutes_backend)
+on Docker Hub.
 
 ---
 
@@ -75,12 +77,34 @@ Built and tested with the Android SDK 36.1.0 toolchain.
 
 ### 1. Run the backend first
 
+Clone it as a sibling folder if you have not already:
+
 ```bash
+git clone https://github.com/Harish-tig/Inminutes_backend.git ../inminutes_backend
 cd ../inminutes_backend
+```
+
+Then either run it directly with Node:
+
+```bash
 npm install
 npm run seed      # ~17 demo products, incl. low-stock and zero-stock items
 npm run dev       # http://localhost:3000
 ```
+
+or with Docker, pulling the published
+[`harishsdockdom/inminutes_backend`](https://hub.docker.com/r/harishsdockdom/inminutes_backend)
+image instead of building locally:
+
+```bash
+docker network create inminutes_network && docker volume create inminutes_db
+docker compose pull && docker compose up -d
+docker compose exec backend npm run seed
+```
+
+Either way the API ends up at `http://localhost:3000`. Full setup, including
+the `.env`/`.env.docker` files both paths need, is in the backend's own
+[README](https://github.com/Harish-tig/Inminutes_backend#readme).
 
 ### 2. Run the app
 
@@ -473,10 +497,12 @@ duplicate-add message still mentions PATCH once the app has reworded it.
 
 A fast double- or even triple-tap on the same ADD button was separately
 verified by hand against a live backend: exactly one cart line at the correct
-summed quantity every time, with the server agreeing — see `ShopState` in
-[CLAUDE.md](CLAUDE.md#5-state-management) for what makes that true even
-though the two network requests behind two taps can arrive at the server out
-of order.
+summed quantity every time, with the server agreeing. `ShopState` makes that
+true by checking whether a product is already in the cart before sending a
+second `POST`, and by serializing the *real* network calls per product — the
+on-screen state already updates in the right order the instant each tap
+lands, but nothing guarantees the two HTTP requests behind them arrive at the
+server in that same order otherwise.
 
 ### Testing realtime by hand
 
@@ -504,8 +530,7 @@ in the seed data make the sold-out path easy to hit.
 | File | Contents |
 |---|---|
 | [docs/FRONTEND.md](docs/FRONTEND.md) | The frontend explained in plain language — folders, screens, flows, realtime |
-| [CLAUDE.md](CLAUDE.md) | Architecture decisions, the verified backend contract, and the rules for changing this code |
-| [../inminutes_backend/apidocs.md](../inminutes_backend/apidocs.md) | Full REST and WebSocket reference |
+| [apidocs.md](https://github.com/Harish-tig/Inminutes_backend/blob/main/apidocs.md) | Full REST and WebSocket reference, in the backend repo |
 
 ---
 
