@@ -17,6 +17,7 @@ on Docker Hub.
 
 - [What it does](#what-it-does)
 - [Versions](#versions)
+- [Demo](#demo)
 - [Setup](#setup)
   - [1. Run the backend first](#1-run-the-backend-first)
   - [2. Run the app](#2-run-the-app)
@@ -101,6 +102,17 @@ Built and tested with the Android SDK 36.1.0 toolchain.
 
 ---
 
+## Demo
+
+[Video walkthrough](https://drive.google.com/drive/folders/158nOjjJBHRdd0bSsUn8BJfhNo65O_Jn_?usp=drive_link)
+of the app in use.
+
+Pre-built APKs are also in the repo root: `app-debug.apk` and
+`app-release.apk`. See [Build an APK](#build-an-apk) for what each one
+points at and how to build your own.
+
+---
+
 ## Setup
 
 ### 1. Run the backend first
@@ -177,9 +189,16 @@ REST calls use `apiBaseUrl` (`.../api`); Socket.IO connects to `serverUrl`
 
 ## Build an APK
 
-Every `flutter build apk` lands in `build/app/outputs/flutter-apk/` — that
-folder is git-ignored, so it is local to whoever ran the build, not something
-a fresh clone comes with.
+**Pre-built copies of both are in the repo root**: `app-debug.apk` and
+`app-release.apk`. Grab one of those to try the app without building
+anything. The `--release` one was built against a dev tunnel
+(`SERVER_URL=https://your-tunnel-url`), so it only reaches a backend while
+that specific tunnel is up — rebuild it against your own tunnel once that one
+expires, using the command below.
+
+To build your own instead, `flutter build apk` puts fresh copies in
+`build/app/outputs/flutter-apk/` — that folder is git-ignored, so it is local
+to whoever ran the build, not something a fresh clone comes with:
 
 ```bash
 flutter build apk --debug
@@ -203,7 +222,8 @@ side under different names (`app-debug.apk` / `app-release.apk`), so building
 one never overwrites the other — but a second `--release` build always does,
 since both share the one `app-release.apk` name regardless of which
 `SERVER_URL` was baked in. Rename the file after building if you want to keep
-more than one release variant around at once.
+more than one release variant around at once — and copy it to the repo root
+in place of the one already there if you want it to be the one people grab.
 
 Smaller, per-architecture APKs:
 
