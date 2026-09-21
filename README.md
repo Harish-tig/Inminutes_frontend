@@ -13,6 +13,34 @@ on Docker Hub.
 
 ---
 
+## Contents
+
+- [What it does](#what-it-does)
+- [Versions](#versions)
+- [Setup](#setup)
+  - [1. Run the backend first](#1-run-the-backend-first)
+  - [2. Run the app](#2-run-the-app)
+  - [3. Point the app at your backend](#3-point-the-app-at-your-backend)
+- [Build an APK](#build-an-apk)
+- [Packages used](#packages-used)
+- [Design](#design)
+- [Architecture](#architecture)
+- [State management](#state-management)
+  - [Keeping rebuilds small, and the scroll where it was](#keeping-rebuilds-small-and-the-scroll-where-it-was)
+- [Socket.IO synchronization](#socketio-synchronization)
+- [Group order flow](#group-order-flow)
+- [API endpoints integrated](#api-endpoints-integrated)
+  - [Error handling](#error-handling)
+- [Endpoints deliberately not called](#endpoints-deliberately-not-called)
+- [Getting back into a group](#getting-back-into-a-group)
+- [Assumptions](#assumptions)
+- [Testing](#testing)
+  - [Testing realtime by hand](#testing-realtime-by-hand)
+- [Documentation](#documentation)
+- [Deliberately left out](#deliberately-left-out)
+
+---
+
 ## What it does
 
 **Getting in**
