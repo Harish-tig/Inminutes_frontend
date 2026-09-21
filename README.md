@@ -149,16 +149,33 @@ REST calls use `apiBaseUrl` (`.../api`); Socket.IO connects to `serverUrl`
 
 ## Build an APK
 
+Every `flutter build apk` lands in `build/app/outputs/flutter-apk/` — that
+folder is git-ignored, so it is local to whoever ran the build, not something
+a fresh clone comes with.
+
 ```bash
-flutter build apk --release
-# -> build/app/outputs/flutter-apk/app-release.apk
+flutter build apk --debug
+# -> build/app/outputs/flutter-apk/app-debug.apk
 ```
 
-Baking in a tunnel URL so the APK works off your dev machine:
+Uses the default `SERVER_URL` (`http://10.0.2.2:3000`, the emulator's alias
+for your machine's `localhost`), so `app-debug.apk` only works against a
+backend running locally on the same machine as the emulator — quick to build,
+larger, unoptimized, fine for local testing.
 
 ```bash
 flutter build apk --release --dart-define=SERVER_URL=https://your-tunnel-url
+# -> build/app/outputs/flutter-apk/app-release.apk
 ```
+
+The one to actually install on a phone: pointed at a dev tunnel instead of
+`localhost` so a phone off your dev machine can reach the backend, and built
+`--release` so it is the optimized, distributable build. The two live side by
+side under different names (`app-debug.apk` / `app-release.apk`), so building
+one never overwrites the other — but a second `--release` build always does,
+since both share the one `app-release.apk` name regardless of which
+`SERVER_URL` was baked in. Rename the file after building if you want to keep
+more than one release variant around at once.
 
 Smaller, per-architecture APKs:
 
@@ -166,7 +183,7 @@ Smaller, per-architecture APKs:
 flutter build apk --release --split-per-abi
 ```
 
-The release build is signed with the debug keys (Flutter's template default),
+Both build modes are signed with the debug keys (Flutter's template default),
 which is fine for an assignment build but not for distribution.
 
 ---
